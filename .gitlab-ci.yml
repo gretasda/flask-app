@@ -2,8 +2,13 @@ variables:
     IMAGE_NAME: gretashehu/demo-app
     IMAGE_TAG: flask-app-1.0
 
+stages:
+    - test
+    - build
+    
 
 run tests:
+    stage: test
     image: 3.12.0a6-slim-buster
     before_script:
         - apt-get update && apt-get install make
@@ -12,6 +17,7 @@ run tests:
         
 
 build_image:
+    stage: build
     image: docker:23.0.1
     services:
         - docker:23.0.1-dind

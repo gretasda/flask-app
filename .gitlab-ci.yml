@@ -1,6 +1,25 @@
+variables:
+    IMAGE_NAME: gretashehu/demo-app
+    IMAGE_TAG: flask-app-1.0
+
+
 run tests:
     image: 3.12.0a6-slim-buster
     before_script:
         - apt-get update && apt-get install make
     script: 
         - make test
+        
+
+build_image:
+    image: docker:23.0.1
+    services:
+        - docker:23.0.1-dind
+    variables:
+        DOCKER_TLS_CERTDIT: "/certs"
+    before_script:
+        - - docker login -u $REGISTRY_USER -p $REGISTRY_PASS
+    script: 
+        - docker build -t $IMAGE_NAME:$IMAGE_TAG .
+        - docker push $IMAGE_NAME:$IMAGE_TAG-1.0
+
